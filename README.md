@@ -1,6 +1,6 @@
 # Superslicer noVNC Docker Container
 
-# THIS IS A WIP AND NOT YET WORKING
+### This is now working and running a working version of Nightly version of 2.4 until it's gone Stable.
 
 ## Overview
 

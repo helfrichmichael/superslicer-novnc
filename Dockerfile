@@ -12,46 +12,47 @@ RUN apt-get update -y && \
     rm -rf /var/lib/apt/lists && \
     mkdir -p /usr/share/desktop-directories
 
-# Get all of the remaining dependencies for the OS and VNC.
+# # Get all of the remaining dependencies for the OS and VNC.
 RUN apt-get update -y && \
     apt-get install -y --no-install-recommends lxterminal nano wget openssh-client rsync ca-certificates xdg-utils htop tar xzip gzip bzip2 zip unzip && \
     rm -rf /var/lib/apt/lists
 
 RUN apt update && apt install -y --no-install-recommends --allow-unauthenticated \
         lxde gtk2-engines-murrine gnome-themes-standard gtk2-engines-pixbuf gtk2-engines-murrine arc-theme \
-        freeglut3 libgtk2.0-dev libwxgtk3.0-gtk3-dev libwx-perl libxmu-dev libgl1-mesa-glx libgl1-mesa-dri xdg-utils locales pcmanfm \
+        freeglut3 libgtk2.0-dev libwxgtk3.0-gtk3-dev libwx-perl libxmu-dev libgl1-mesa-glx libgl1-mesa-dri \
+        xdg-utils locales pcmanfm libgtk-3-dev libglew-dev libudev-dev libdbus-1-dev zlib1g-dev locales locales-all \
     && apt autoclean -y \
     && apt autoremove -y \
     && rm -rf /var/lib/apt/lists/*
-
-# Set the locale as this is required for Superslicer to work.
-RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && \
-    locale-gen
-ENV LANG en_US.UTF-8  
-ENV LANGUAGE en_US:en  
-ENV LC_ALL en_US.UTF-8
 
 # Install Superslicer and its dependencies.
 # Many of the commands below were derived and pulled from previous work by dmagyar on GitHub.
 # Here's their Dockerfile for reference https://github.com/dmagyar/prusaslicer-vnc-docker/blob/main/Dockerfile.amd64
 WORKDIR /slic3r
 ADD get_latest_superslicer_release.sh /slic3r
+ADD nightly_linux_gtk2.tar.zip /slic3r
 
 RUN apt-get update && apt-get install -y \
   jq \
   curl \
   git \
   --no-install-recommends \
-  && chmod +x /slic3r/get_latest_superslicer_release.sh \
-  && latestSlic3r=$(/slic3r/get_latest_superslicer_release.sh url) \
-  && slic3rReleaseName=$(/slic3r/get_latest_superslicer_release.sh name) \
-  && curl -sSL ${latestSlic3r} > ${slic3rReleaseName} \
-  && rm -f /slic3r/releaseInfo.json \
+  # The section below has been commented out until 2.4 is officially stable and released for SuperSlicer.
+  # && chmod +x /slic3r/get_latest_superslicer_release.sh \
+  # && latestSlic3r=$(/slic3r/get_latest_superslicer_release.sh url) \
+  # && slic3rReleaseName=$(/slic3r/get_latest_superslicer_release.sh name) \
+  # && curl -sSL ${latestSlic3r} > ${slic3rReleaseName} \
+  # && rm -f /slic3r/releaseInfo.json \
+  # && mkdir -p /slic3r/slic3r-dist \
+  # && tar -xzf ${slic3rReleaseName} -C /slic3r/slic3r-dist --strip-components 1 \
+  # && rm -f /slic3r/${slic3rReleaseName} \
+  # && rm -rf /var/lib/apt/lists/* \
   && mkdir -p /slic3r/slic3r-dist \
-  && tar -xzf ${slic3rReleaseName} -C /slic3r/slic3r-dist --strip-components 1 \
-  && rm -f /slic3r/${slic3rReleaseName} \
+  && tar -xzf nightly_linux_gtk2.tar.zip -C /slic3r/slic3r-dist --strip-components 1 \
+  && rm -f /slic3r/nightly_linux_gtk2.tar.zip \
   && rm -rf /var/lib/apt/lists/* \
   && apt-get autoclean \
+  && chmod -R 777 /slic3r/ \
   && groupadd slic3r \
   && useradd -g slic3r --create-home --home-dir /home/slic3r slic3r \
   && mkdir -p /slic3r \

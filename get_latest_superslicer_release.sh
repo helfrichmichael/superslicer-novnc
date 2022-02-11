@@ -17,7 +17,7 @@ if [[ $# -lt 1 ]]; then
   echo
   echo "	name_ver: Takes a parameter to specify the filename to retrieve (note: this has a '+' added on at the end of the provided version number)"
   echo "	name_ver example: $0 name_ver 2.0.0"
-  echo "	output: PrusaSlicer-2.0.0+linux64-201905201652.tar.bz2"
+  echo "	output: SuperSlicer_2.3.57.10_linux64_220203.tar.zip"
   echo
   exit 1
 fi

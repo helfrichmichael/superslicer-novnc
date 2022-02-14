@@ -16,10 +16,10 @@ If you're using unraid, open your Docker page and under `Template repositories`,
 
 **Outside of unraid**
 
-To run this image, you can run the following command: `docker run --detach --volume=superslicer-novnc-data:/configs/ -p 8080:8080 -e SSL_CERT_FILE="/etc/ssl/certs/ca-certificates.crt" 
+To run this image, you can run the following command: `docker run --detach --volume=superslicer-novnc-data:/configs/ --volume=superslicer-novnc-prints:/prints/ -p 8080:8080 -e SSL_CERT_FILE="/etc/ssl/certs/ca-certificates.crt" 
 --name=superslicer-novnc superslicer-novnc`
 
-This will bind `/configs/` in the container to a local volume on my machine named `superslicer-novnc-data`, it will bind port `8080` to `8080`, and finally, it will provide an environment variable to keep SuperSlicer happy by providing an `SSL_CERT_FILE`.
+This will bind `/configs/` in the container to a local volume on my machine named `superslicer-novnc-data`. Additionally it will bind `/prints/` in the container to `superslicer-novnc-prints` locally on my machine, it will bind port `8080` to `8080`, and finally, it will provide an environment variable to keep SuperSlicer happy by providing an `SSL_CERT_FILE`.
 
 ## Links
 

@@ -31,21 +31,16 @@ RUN apt update && apt install -y --no-install-recommends --allow-unauthenticated
 # Here's their Dockerfile for reference https://github.com/dmagyar/prusaslicer-vnc-docker/blob/main/Dockerfile.amd64
 WORKDIR /slic3r
 ADD get_latest_superslicer_release.sh /slic3r
-ADD nightly_linux_gtk2.tar.zip /slic3r
 
 RUN mkdir -p /slic3r/slic3r-dist \
-  # The section below has been commented out until 2.4 is officially stable and released for SuperSlicer.
-  # && chmod +x /slic3r/get_latest_superslicer_release.sh \
-  # && latestSlic3r=$(/slic3r/get_latest_superslicer_release.sh url) \
-  # && slic3rReleaseName=$(/slic3r/get_latest_superslicer_release.sh name) \
-  # && curl -sSL ${latestSlic3r} > ${slic3rReleaseName} \
-  # && rm -f /slic3r/releaseInfo.json \
-  # && mkdir -p /slic3r/slic3r-dist \
-  # && tar -xzf ${slic3rReleaseName} -C /slic3r/slic3r-dist --strip-components 1 \
-  # && rm -f /slic3r/${slic3rReleaseName} \
-  # && rm -rf /var/lib/apt/lists/* \
-  && tar -xzf nightly_linux_gtk2.tar.zip -C /slic3r/slic3r-dist --strip-components 1 \
-  && rm -f /slic3r/nightly_linux_gtk2.tar.zip \
+  && chmod +x /slic3r/get_latest_superslicer_release.sh \
+  && latestSlic3r=$(/slic3r/get_latest_superslicer_release.sh url) \
+  && slic3rReleaseName=$(/slic3r/get_latest_superslicer_release.sh name) \
+  && curl -sSL ${latestSlic3r} > ${slic3rReleaseName} \
+  && rm -f /slic3r/releaseInfo.json \
+  && mkdir -p /slic3r/slic3r-dist \
+  && tar -xzf ${slic3rReleaseName} -C /slic3r/slic3r-dist --strip-components 1 \
+  && rm -f /slic3r/${slic3rReleaseName} \
   && rm -rf /var/lib/apt/lists/* \
   && apt-get autoclean \
   && chmod -R 777 /slic3r/ \
